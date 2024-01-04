@@ -1,11 +1,16 @@
 import { useState } from "react";
-import "./App.css";
 import Title from "./components/Title";
+import Counter from "./components/Counter";
 
 function App() {
   return (
     <div>
-      <Title />
+      <div>
+        <Title />
+      </div>
+      <div>
+        <Counter />
+      </div>
     </div>
   );
 }
