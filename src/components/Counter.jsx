@@ -5,11 +5,11 @@ const Counter = () => {
   let [count, setCount] = useState(0);
 
   const addCount = () => {
-    setCount((count += 1));
+    setCount(count + 1);
   };
   const reduceCount = () => {
     if (count !== 0) {
-      setCount((count -= 1));
+      setCount(count - 1);
     }
   };
 
