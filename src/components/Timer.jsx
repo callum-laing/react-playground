@@ -2,39 +2,50 @@ import { useEffect, useState } from "react";
 import "./Timer.css";
 
 const Timer = () => {
-  let [count, setCount] = useState(30);
-  const [isRunning, setIsRunning] = useState(false);
+  const initialCount = 30;
+  const [count, setCount] = useState(initialCount);
+  const [intervalId, setIntervalId] = useState(null);
 
   const countdown = () => {
-    if (count > 0) {
-      setCount(count - 1);
-    } else {
-      console.log("count is 0");
-      setIsRunning(false);
-    }
+    setCount((prevCount) => {
+      if (prevCount > 0) {
+        return prevCount - 1;
+      } else {
+        console.log("Count is 0");
+        stopTimer();
+        return prevCount;
+      }
+    });
+  };
+
+  const startTimer = () => {
+    const id = setInterval(countdown, 1000);
+    setIntervalId(id);
+  };
+
+  const stopTimer = () => {
+    setCount(initialCount);
+    clearInterval(intervalId);
+    setIntervalId(null);
   };
 
   const toggleTimer = () => {
-    setIsRunning((prevIsRunning) => !prevIsRunning);
+    if (intervalId) {
+      stopTimer();
+    } else {
+      startTimer();
+    }
   };
 
   useEffect(() => {
-    let intervalId;
-
-    if (isRunning) {
-      intervalId = setInterval(countdown, 1000);
-    } else {
-      clearInterval(intervalId);
-    }
-
     return () => {
       clearInterval(intervalId);
     };
-  }, [count, isRunning]);
+  }, [intervalId]);
 
   return (
     <div>
-      <button className="timerBtn" onClick={toggleTimer} disabled={isRunning}>
+      <button className="timerBtn" onClick={toggleTimer}>
         {count}
       </button>
     </div>
