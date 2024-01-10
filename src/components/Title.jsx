@@ -3,7 +3,7 @@ import "./Title.css";
 const Title = () => {
   return (
     <div className="titleContainer">
-      <h1>React Playground</h1>
+      <h1>Workout App</h1>
     </div>
   );
 };

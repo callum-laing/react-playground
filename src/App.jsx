@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Title from "./components/Title";
-import Counter from "./components/Counter";
+import Timer from "./components/Timer";
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
         <Title />
       </div>
       <div>
-        <Counter />
+        <Timer />
       </div>
     </div>
   );
