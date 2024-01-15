@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import "./Timer.css";
 
 const Timer = () => {
-  const initialCount = 30;
+  const initialCount = 5;
+  const cooldownCount = 15;
   const [count, setCount] = useState(initialCount);
   const [intervalId, setIntervalId] = useState(null);
 
@@ -10,8 +11,10 @@ const Timer = () => {
     setCount((prevCount) => {
       if (prevCount > 0) {
         return prevCount - 1;
+      } else if (prevCount == 0) {
+        cooldownTimer();
+        return prevCount - 1;
       } else {
-        console.log("Count is 0");
         stopTimer();
         return prevCount;
       }
@@ -27,6 +30,10 @@ const Timer = () => {
     setCount(initialCount);
     clearInterval(intervalId);
     setIntervalId(null);
+  };
+
+  const cooldownTimer = () => {
+    setCount(cooldownCount);
   };
 
   const toggleTimer = () => {
