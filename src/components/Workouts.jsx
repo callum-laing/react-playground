@@ -9,8 +9,8 @@ const Workout = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(`/workouts/${workoutId}.txt`);
-        const workoutId = await response.text();
-        setWorkoutTxt(workoutTxt);
+        const workoutData = await response.text();
+        setWorkoutTxt(workoutData);
       } catch (error) {
         console.error("Error fetching workout data: ", error);
       }
