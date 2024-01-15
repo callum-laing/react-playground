@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Title from "./components/Title";
 import Timer from "./components/Timer";
+import Workouts from "./components/Workouts";
 
 function App() {
   return (
@@ -10,6 +11,9 @@ function App() {
       </div>
       <div>
         <Timer />
+      </div>
+      <div>
+        <Workouts />
       </div>
     </div>
   );
