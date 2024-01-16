@@ -3,8 +3,11 @@ import "./Timer.css";
 
 const Timer = () => {
   const workoutCount = 5.0;
-  const [appState, setAppState] = useState({ count: workoutCount, state: "stopped" });
-  const [timer, setTimer] = useState(null)
+  const [appState, setAppState] = useState({
+    count: workoutCount,
+    state: "stopped",
+  });
+  const [timer, setTimer] = useState(null);
   const cooldownCount = 3;
 
   //Pure Function
@@ -28,8 +31,8 @@ const Timer = () => {
   const startTimer = () => {
     let interval = setInterval(() => {
       const event = new CustomEvent("tick");
-      document.dispatchEvent(event)
-    }, 50)
+      document.dispatchEvent(event);
+    }, 50);
     setTimer(interval);
     setAppState({ count: workoutCount, state: "workout" });
   };
@@ -50,17 +53,25 @@ const Timer = () => {
   useEffect(() => {
     let listener = document.addEventListener("tick", () => {
       setAppState((prevState) => {
-        return newTick(prevState, cooldownCount, workoutCount)
+        return newTick(prevState, cooldownCount, workoutCount);
       });
     });
-   
-    return document.removeEventListener("tick", listener)
+
+    return document.removeEventListener("tick", listener);
   }, []);
 
   return (
     <div>
-      <button className="timerBtn" onClick={toggleTimer}>
-        {appState.count.toLocaleString(undefined, {maximumFractionDigits:2, minimumFractionDigits: 2}) }
+      <button
+        className={`timerBtn ${
+          appState.state === "cooldown" ? "cooldownStyle" : "workoutStyle"
+        }`}
+        onClick={toggleTimer}
+      >
+        {appState.count.toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        })}
       </button>
     </div>
   );
