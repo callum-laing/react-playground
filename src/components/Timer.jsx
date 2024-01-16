@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import "./Timer.css";
 
 const Timer = () => {
-  const workoutCount = 5;
-  const [appState, setAppState] = useState({ count: 8, state: "stopped" });
+  const workoutCount = 5.0;
+  const [appState, setAppState] = useState({ count: workoutCount, state: "stopped" });
+  const [timer, setTimer] = useState(null)
   const cooldownCount = 3;
 
   //Pure Function
@@ -13,7 +14,7 @@ const Timer = () => {
     }
 
     if (state.count > 0) {
-      return { count: state.count - 1, state: state.state };
+      return { count: Math.max(state.count - 0.05, 0), state: state.state };
     } else {
       // get below 0
       if (state.state == "workout")
@@ -25,10 +26,16 @@ const Timer = () => {
   };
 
   const startTimer = () => {
+    let interval = setInterval(() => {
+      const event = new CustomEvent("tick");
+      document.dispatchEvent(event)
+    }, 50)
+    setTimer(interval);
     setAppState({ count: workoutCount, state: "workout" });
   };
 
   const stopTimer = () => {
+    clearInterval(timer);
     setAppState({ count: workoutCount, state: "stopped" });
   };
 
@@ -41,19 +48,19 @@ const Timer = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    let listener = document.addEventListener("tick", () => {
       setAppState((prevState) => {
-        console.log(prevState);
-        return newTick(prevState, cooldownCount, workoutCount);
+        return newTick(prevState, cooldownCount, workoutCount)
       });
-    }, 1000);
-    return () => clearInterval(interval);
+    });
+   
+    return document.removeEventListener("tick", listener)
   }, []);
 
   return (
     <div>
       <button className="timerBtn" onClick={toggleTimer}>
-        {appState.count}
+        {appState.count.toLocaleString(undefined, {maximumFractionDigits:2, minimumFractionDigits: 2}) }
       </button>
     </div>
   );
