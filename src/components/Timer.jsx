@@ -2,42 +2,38 @@ import { useEffect, useState } from "react";
 import "./Timer.css";
 
 const Timer = () => {
-  const initialCount = 5;
-  const cooldownCount = 15;
-  const [count, setCount] = useState(initialCount);
-  const [intervalId, setIntervalId] = useState(null);
+  const workoutCount = 5;
+  const [appState, setAppState] = useState({ count: 8, state: "stopped" });
+  const cooldownCount = 3;
 
-  const countdown = () => {
-    setCount((prevCount) => {
-      if (prevCount > 0) {
-        return prevCount - 1;
-      } else if (prevCount == 0) {
-        cooldownTimer();
-        return prevCount - 1;
-      } else {
-        stopTimer();
-        return prevCount;
-      }
-    });
+  //Pure Function
+  const newTick = (state, cooldownCount, workoutCount) => {
+    if (state.state == "stopped") {
+      return { count: workoutCount, state: state.state };
+    }
+
+    if (state.count > 0) {
+      return { count: state.count - 1, state: state.state };
+    } else {
+      // get below 0
+      if (state.state == "workout")
+        // in workout
+        return { count: cooldownCount, state: "cooldown" };
+      // in cooldown mode
+      else return { count: workoutCount, state: "workout" };
+    }
   };
 
   const startTimer = () => {
-    const id = setInterval(countdown, 1000);
-    setIntervalId(id);
+    setAppState({ count: workoutCount, state: "workout" });
   };
 
   const stopTimer = () => {
-    setCount(initialCount);
-    clearInterval(intervalId);
-    setIntervalId(null);
-  };
-
-  const cooldownTimer = () => {
-    setCount(cooldownCount);
+    setAppState({ count: workoutCount, state: "stopped" });
   };
 
   const toggleTimer = () => {
-    if (intervalId) {
+    if (appState.state !== "stopped") {
       stopTimer();
     } else {
       startTimer();
@@ -45,15 +41,19 @@ const Timer = () => {
   };
 
   useEffect(() => {
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [intervalId]);
+    const interval = setInterval(() => {
+      setAppState((prevState) => {
+        console.log(prevState);
+        return newTick(prevState, cooldownCount, workoutCount);
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div>
       <button className="timerBtn" onClick={toggleTimer}>
-        {count}
+        {appState.count}
       </button>
     </div>
   );
