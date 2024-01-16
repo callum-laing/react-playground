@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import "./Timer.css";
 
 const Timer = () => {
-  const workoutCount = 5.0;
+  const workoutCount = 30.0;
   const [appState, setAppState] = useState({
     count: workoutCount,
     state: "stopped",
   });
   const [timer, setTimer] = useState(null);
-  const cooldownCount = 3;
+  const cooldownCount = 15;
 
   //Pure Function
   const newTick = (state, cooldownCount, workoutCount) => {
